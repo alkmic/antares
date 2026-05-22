@@ -1,12 +1,14 @@
 {
-  "name": "antares-scaffold",
+  "name": "antares",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "payload": "dotenv -e .env.local -- payload --disable-transpile",
+    "generate:types": "dotenv -e .env.local -- payload generate:types --disable-transpile"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.84.1",
@@ -27,6 +29,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "autoprefixer": "^10.5.0",
+    "dotenv-cli": "^11.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.4.11",
     "postcss": "^8.5.15",
