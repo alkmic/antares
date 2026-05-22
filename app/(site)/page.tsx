@@ -7,6 +7,7 @@ import { site } from '@/lib/site';
 import { clientReferences } from '@/lib/references';
 import { getExpertises, getRecentArticles } from '@/lib/api';
 import { readingTime } from '@/lib/lexical';
+import { legalServiceJsonLd } from '@/lib/structured-data';
 
 export const metadata: Metadata = {
   description: site.description,
@@ -49,42 +50,9 @@ function categoryLabel(a: Article): string {
 export default async function HomePage() {
   const [expertises, articles] = await Promise.all([getExpertises(), getRecentArticles(3)]);
 
-  const legalService = {
-    '@context': 'https://schema.org',
-    '@type': 'LegalService',
-    name: site.name,
-    description: site.description,
-    url: site.url,
-    areaServed: 'FR',
-    knowsLanguage: ['fr', 'en'],
-    address: [
-      {
-        '@type': 'PostalAddress',
-        streetAddress: '3 square Lamartine',
-        postalCode: '75116',
-        addressLocality: 'Paris',
-        addressCountry: 'FR',
-      },
-      {
-        '@type': 'PostalAddress',
-        streetAddress: '7 allée du Mail',
-        postalCode: '91300',
-        addressLocality: 'Massy',
-        addressCountry: 'FR',
-      },
-      {
-        '@type': 'PostalAddress',
-        streetAddress: '9 avenue Henri Matisse',
-        postalCode: '06200',
-        addressLocality: 'Nice',
-        addressCountry: 'FR',
-      },
-    ],
-  };
-
   return (
     <>
-      <JsonLd data={legalService} />
+      <JsonLd data={legalServiceJsonLd()} />
 
       {/* HERO — asymétrie 1.1fr / 380px, jamais centré */}
       <section className="container py-s-9 lg:py-s-10 border-b border-line">

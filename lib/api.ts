@@ -1,4 +1,4 @@
-import type { Article, Expertise } from '@/payload-types';
+import type { Article, Avocat, Expertise } from '@/payload-types';
 import { getPayloadClient } from './payload';
 
 /**
@@ -30,6 +30,24 @@ export async function getRecentArticles(limit = 3): Promise<Article[]> {
       where: { status: { equals: 'published' } },
       sort: '-publishedAt',
       limit,
+      depth: 1,
+    });
+    return docs;
+  } catch {
+    return [];
+  }
+}
+
+export async function getPartners(): Promise<Avocat[]> {
+  try {
+    const payload = await getPayloadClient();
+    const { docs } = await payload.find({
+      collection: 'avocats',
+      where: {
+        and: [{ isPartner: { equals: true } }, { isPublished: { equals: true } }],
+      },
+      sort: 'orderIndex',
+      limit: 20,
       depth: 1,
     });
     return docs;
