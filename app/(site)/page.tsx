@@ -1,6 +1,6 @@
 export default function Home() {
   return (
-    <main className="container py-s-10">
+    <section className="container py-s-10">
       <p className="font-mono text-mono-label uppercase text-muted">
         ⌗&nbsp;Antares Avocats · V2
       </p>
@@ -12,6 +12,6 @@ export default function Home() {
         Next.js 15 · Payload 3 · Tailwind. Placeholder de vérification des
         tokens, remplacé prochainement par le site éditorial.
       </p>
-    </main>
+    </section>
   );
 }
