@@ -68,6 +68,12 @@ export interface Config {
   blocks: {};
   collections: {
     users: User;
+    media: Media;
+    avocats: Avocat;
+    expertises: Expertise;
+    articles: Article;
+    bookings: Booking;
+    'job-applications': JobApplication;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -76,6 +82,12 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
+    avocats: AvocatsSelect<false> | AvocatsSelect<true>;
+    expertises: ExpertisesSelect<false> | ExpertisesSelect<true>;
+    articles: ArticlesSelect<false> | ArticlesSelect<true>;
+    bookings: BookingsSelect<false> | BookingsSelect<true>;
+    'job-applications': JobApplicationsSelect<false> | JobApplicationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -145,6 +157,157 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  alt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "avocats".
+ */
+export interface Avocat {
+  id: number;
+  firstName: string;
+  lastName: string;
+  slug: string;
+  role?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  calendlyUrl?: string | null;
+  photo?: (number | null) | Media;
+  bioShort?: string | null;
+  bioLong?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  expertises?: (number | Expertise)[] | null;
+  isPartner?: boolean | null;
+  isPublished?: boolean | null;
+  orderIndex?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "expertises".
+ */
+export interface Expertise {
+  id: number;
+  name: string;
+  slug: string;
+  lede?: string | null;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  orderIndex?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "articles".
+ */
+export interface Article {
+  id: number;
+  title: string;
+  slug: string;
+  subtitle?: string | null;
+  type?: ('decryptage' | 'alerte' | 'actualite' | 'analyse' | 'tribune') | null;
+  status?: ('draft' | 'review' | 'published' | 'scheduled' | 'archived') | null;
+  lede?: string | null;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  coverImage?: (number | null) | Media;
+  authors?: (number | Avocat)[] | null;
+  expertise?: (number | null) | Expertise;
+  publishedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bookings".
+ */
+export interface Booking {
+  id: number;
+  clientName: string;
+  clientEmail: string;
+  scheduledAt?: string | null;
+  durationMinutes?: number | null;
+  avocat?: (number | null) | Avocat;
+  location?: ('visio' | 'paris' | 'massy' | 'nice') | null;
+  status?: ('scheduled' | 'completed' | 'cancelled' | 'no_show') | null;
+  calendlyEventUri?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "job-applications".
+ */
+export interface JobApplication {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone?: string | null;
+  desiredRole?: string | null;
+  targetExpertise?: (number | null) | Expertise;
+  status?: ('new' | 'reviewing' | 'interview' | 'rejected' | 'hired' | 'archived') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -166,10 +329,35 @@ export interface PayloadKv {
  */
 export interface PayloadLockedDocument {
   id: number;
-  document?: {
-    relationTo: 'users';
-    value: number | User;
-  } | null;
+  document?:
+    | ({
+        relationTo: 'users';
+        value: number | User;
+      } | null)
+    | ({
+        relationTo: 'media';
+        value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'avocats';
+        value: number | Avocat;
+      } | null)
+    | ({
+        relationTo: 'expertises';
+        value: number | Expertise;
+      } | null)
+    | ({
+        relationTo: 'articles';
+        value: number | Article;
+      } | null)
+    | ({
+        relationTo: 'bookings';
+        value: number | Booking;
+      } | null)
+    | ({
+        relationTo: 'job-applications';
+        value: number | JobApplication;
+      } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
@@ -236,6 +424,109 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "avocats_select".
+ */
+export interface AvocatsSelect<T extends boolean = true> {
+  firstName?: T;
+  lastName?: T;
+  slug?: T;
+  role?: T;
+  email?: T;
+  phone?: T;
+  calendlyUrl?: T;
+  photo?: T;
+  bioShort?: T;
+  bioLong?: T;
+  expertises?: T;
+  isPartner?: T;
+  isPublished?: T;
+  orderIndex?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "expertises_select".
+ */
+export interface ExpertisesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  lede?: T;
+  body?: T;
+  orderIndex?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "articles_select".
+ */
+export interface ArticlesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  subtitle?: T;
+  type?: T;
+  status?: T;
+  lede?: T;
+  body?: T;
+  coverImage?: T;
+  authors?: T;
+  expertise?: T;
+  publishedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bookings_select".
+ */
+export interface BookingsSelect<T extends boolean = true> {
+  clientName?: T;
+  clientEmail?: T;
+  scheduledAt?: T;
+  durationMinutes?: T;
+  avocat?: T;
+  location?: T;
+  status?: T;
+  calendlyEventUri?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "job-applications_select".
+ */
+export interface JobApplicationsSelect<T extends boolean = true> {
+  firstName?: T;
+  lastName?: T;
+  email?: T;
+  phone?: T;
+  desiredRole?: T;
+  targetExpertise?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
