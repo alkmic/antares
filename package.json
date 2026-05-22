@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "payload": "dotenv -e .env.local -- payload --disable-transpile",
-    "generate:types": "dotenv -e .env.local -- payload generate:types --disable-transpile"
+    "generate:types": "dotenv -e .env.local -- payload generate:types --disable-transpile",
+    "generate:importmap": "dotenv -e .env.local -- payload generate:importmap --disable-transpile"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.84.1",
