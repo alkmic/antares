@@ -24,6 +24,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
+    push: false,
   }),
   localization: {
     locales: [
